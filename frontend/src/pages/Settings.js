@@ -124,23 +124,23 @@ function Settings() {
 
   return (
     <Box>
-      <Typography variant="h5" component="h2" sx={{ mb: 3 }}>
+      <Typography variant="h5" component="h2" sx={{ mb: 3, fontWeight: 800, letterSpacing: 1, color: 'primary.main' }}>
         Ayarlar
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>
+          <Paper sx={{ p: 3, borderRadius: 4, boxShadow: '0 4px 24px rgba(0,0,0,0.08)', background: 'linear-gradient(135deg, #fffbe6 0%, #f8f9fa 100%)' }}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, color: 'primary.main' }}>
               Trendyol API Ayarları
             </Typography>
-            <Box component="form" sx={{ mt: 2 }}>
+            <Box component="form" sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
               <TextField
                 fullWidth
                 label="Supplier ID"
                 name="supplierId"
                 value={formData.supplierId}
                 onChange={handleChange}
-                margin="normal"
+                sx={{ borderRadius: 2 }}
               />
               <TextField
                 fullWidth
@@ -148,7 +148,7 @@ function Settings() {
                 name="apiKey"
                 value={formData.apiKey}
                 onChange={handleChange}
-                margin="normal"
+                sx={{ borderRadius: 2 }}
               />
               <TextField
                 fullWidth
@@ -157,13 +157,21 @@ function Settings() {
                 type="password"
                 value={formData.apiSecret}
                 onChange={handleChange}
-                margin="normal"
+                sx={{ borderRadius: 2 }}
               />
               <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
                 <Button
                   variant="contained"
                   startIcon={<SaveIcon />}
                   onClick={handleSave}
+                  sx={{
+                    borderRadius: 3,
+                    fontWeight: 700,
+                    px: 2.5,
+                    py: 1.2,
+                    fontSize: 16,
+                    boxShadow: '0 2px 8px rgba(255,111,60,0.12)',
+                  }}
                 >
                   Kaydet
                 </Button>
@@ -171,6 +179,13 @@ function Settings() {
                   variant="outlined"
                   onClick={handleTestConnection}
                   disabled={!formData.apiKey || !formData.apiSecret || !formData.supplierId}
+                  sx={{
+                    borderRadius: 3,
+                    fontWeight: 700,
+                    px: 2.5,
+                    py: 1.2,
+                    fontSize: 16,
+                  }}
                 >
                   Bağlantıyı Test Et
                 </Button>
@@ -179,17 +194,21 @@ function Settings() {
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>
+          <Paper sx={{ p: 3, borderRadius: 4, boxShadow: '0 4px 24px rgba(0,0,0,0.08)', background: 'linear-gradient(135deg, #fffbe6 0%, #f8f9fa 100%)' }}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, color: 'primary.main' }}>
               Genel Ayarlar
             </Typography>
-            <Box component="form" sx={{ mt: 2 }}>
+            <Box component="form" sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
               <FormControlLabel
                 control={
                   <Switch
                     checked={formData.autoSync}
                     onChange={handleChange}
                     name="autoSync"
+                    sx={{
+                      '& .MuiSwitch-thumb': { bgcolor: 'primary.main' },
+                      '& .MuiSwitch-track': { bgcolor: 'primary.light' },
+                    }}
                   />
                 }
                 label="Otomatik Senkronizasyon"
@@ -198,28 +217,33 @@ function Settings() {
                 fullWidth
                 label="Minimum Stok Uyarı Limiti"
                 name="minStockAlert"
-                type="number"
                 value={formData.minStockAlert}
                 onChange={handleChange}
-                margin="normal"
+                sx={{ borderRadius: 2 }}
               />
               <TextField
                 fullWidth
-                label="Stok Güncelleme Sıklığı (dakika)"
+                label="Stok Güncelleme Aralığı (dk)"
                 name="stockUpdateInterval"
-                type="number"
                 value={formData.stockUpdateInterval}
                 onChange={handleChange}
-                margin="normal"
+                sx={{ borderRadius: 2 }}
               />
               <TextField
                 fullWidth
-                label="Sipariş Kontrol Sıklığı (dakika)"
+                label="Sipariş Kontrol Aralığı (dk)"
                 name="orderCheckInterval"
-                type="number"
                 value={formData.orderCheckInterval}
                 onChange={handleChange}
-                margin="normal"
+                sx={{ borderRadius: 2 }}
+              />
+              <TextField
+                fullWidth
+                label="Webhook URL"
+                name="webhookUrl"
+                value={formData.webhookUrl}
+                onChange={handleChange}
+                sx={{ borderRadius: 2 }}
               />
             </Box>
           </Paper>

@@ -20,24 +20,50 @@ import { fetchStock } from '../store/slices/stockSlice';
 const StatCard = ({ title, value, icon, color, loading }) => (
   <Paper
     sx={{
-      p: 2,
+      p: 3,
       display: 'flex',
       flexDirection: 'column',
-      height: 140,
+      height: 160,
+      borderRadius: 4,
+      boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
+      background: 'linear-gradient(135deg, #fffbe6 0%, #f8f9fa 100%)',
+      position: 'relative',
+      overflow: 'hidden',
+      transition: 'box-shadow 0.2s',
+      '&:hover': {
+        boxShadow: '0 8px 32px rgba(0,0,0,0.13)',
+        transform: 'translateY(-2px) scale(1.02)',
+      },
     }}
   >
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <Typography component="h2" variant="h6" color="primary" gutterBottom>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+      <Typography component="h2" variant="subtitle1" color="secondary" sx={{ fontWeight: 700, letterSpacing: 1 }}>
         {title}
       </Typography>
-      {icon}
+      <Box
+        sx={{
+          bgcolor: color || 'primary.main',
+          color: '#fff',
+          borderRadius: '50%',
+          width: 48,
+          height: 48,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+          fontSize: 28,
+          transition: 'background 0.2s',
+        }}
+      >
+        {icon}
+      </Box>
     </Box>
     {loading ? (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-        <CircularProgress size={24} />
+        <CircularProgress size={28} />
       </Box>
     ) : (
-      <Typography component="p" variant="h4">
+      <Typography component="p" variant="h3" sx={{ fontWeight: 800, color: 'primary.dark', mt: 2 }}>
         {value}
       </Typography>
     )}
@@ -72,7 +98,8 @@ function Dashboard() {
           <StatCard
             title="Toplam Ürün"
             value={stats.totalProducts}
-            icon={<ProductsIcon sx={{ color: 'primary.main' }} />}
+            icon={<ProductsIcon sx={{ fontSize: 28 }} />}
+            color="primary.main"
             loading={productsStatus === 'loading'}
           />
         </Grid>
@@ -80,7 +107,8 @@ function Dashboard() {
           <StatCard
             title="Aktif Sipariş"
             value={stats.activeOrders}
-            icon={<OrdersIcon sx={{ color: 'primary.main' }} />}
+            icon={<OrdersIcon sx={{ fontSize: 28 }} />}
+            color="info.main"
             loading={ordersStatus === 'loading'}
           />
         </Grid>
@@ -88,7 +116,8 @@ function Dashboard() {
           <StatCard
             title="Düşük Stok"
             value={stats.lowStock}
-            icon={<StockIcon sx={{ color: 'warning.main' }} />}
+            icon={<StockIcon sx={{ fontSize: 28 }} />}
+            color="warning.main"
             loading={stockStatus === 'loading'}
           />
         </Grid>
@@ -96,7 +125,8 @@ function Dashboard() {
           <StatCard
             title="Senkronizasyon Bekleyen"
             value={stats.pendingSync}
-            icon={<AlertIcon sx={{ color: 'error.main' }} />}
+            icon={<AlertIcon sx={{ fontSize: 28 }} />}
+            color="error.main"
             loading={isLoading}
           />
         </Grid>

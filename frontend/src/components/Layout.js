@@ -12,6 +12,10 @@ import {
   ListItemText,
   Toolbar,
   Typography,
+  Avatar,
+  Menu,
+  MenuItem,
+  Divider,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -20,6 +24,7 @@ import {
   ShoppingCart as OrdersIcon,
   Storage as StockIcon,
   Settings as SettingsIcon,
+  AccountCircle,
 } from '@mui/icons-material';
 
 const drawerWidth = 240;
@@ -34,6 +39,7 @@ const menuItems = [
 
 function Layout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -41,13 +47,40 @@ function Layout({ children }) {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleAvatarClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
   const drawer = (
-    <div>
-      <Toolbar>
-        <Typography variant="h6" noWrap component="div">
-          Trendyol Entegrasyonu
+    <div style={{
+      height: '100%',
+      background: 'linear-gradient(135deg, #ff6f3c 0%, #ffb26b 100%)',
+      color: '#fff',
+      boxShadow: '2px 0 12px rgba(0,0,0,0.07)'
+    }}>
+      <Toolbar sx={{ justifyContent: 'center', alignItems: 'center', minHeight: 72 }}>
+        <Avatar sx={{ bgcolor: '#fff', color: '#ff6f3c', mr: 1, width: 36, height: 36, fontWeight: 700 }}>T</Avatar>
+        <Typography
+          variant="h6"
+          noWrap={false}
+          component="div"
+          sx={{
+            fontWeight: 700,
+            letterSpacing: 1,
+            fontSize: 18,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            lineHeight: 1.2,
+            maxWidth: 120, 
+          }}
+        >
+          Trendyol Satıcı Paneli
         </Typography>
       </Toolbar>
+      <Divider sx={{ bgcolor: 'rgba(255,255,255,0.2)', mb: 1 }} />
       <List>
         {menuItems.map((item) => (
           <ListItem
@@ -55,8 +88,20 @@ function Layout({ children }) {
             key={item.text}
             onClick={() => navigate(item.path)}
             selected={location.pathname === item.path}
+            sx={{
+              borderRadius: 2,
+              mb: 0.5,
+              bgcolor: location.pathname === item.path ? 'rgba(255,255,255,0.18)' : 'transparent',
+              color: '#fff',
+              '&:hover': {
+                bgcolor: 'rgba(255,255,255,0.12)',
+                color: '#fff',
+              },
+              fontWeight: location.pathname === item.path ? 700 : 500,
+              boxShadow: location.pathname === item.path ? '0 2px 8px rgba(0,0,0,0.10)' : 'none',
+            }}
           >
-            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemIcon sx={{ color: '#fff', minWidth: 36 }}>{item.icon}</ListItemIcon>
             <ListItemText primary={item.text} />
           </ListItem>
         ))}
@@ -69,9 +114,13 @@ function Layout({ children }) {
       <CssBaseline />
       <AppBar
         position="fixed"
+        elevation={0}
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
+          background: 'linear-gradient(90deg, #ff6f3c 0%, #ffb26b 100%)',
+          color: '#fff',
+          boxShadow: '0 2px 12px rgba(0,0,0,0.07)'
         }}
       >
         <Toolbar>
@@ -84,9 +133,22 @@ function Layout({ children }) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 700, letterSpacing: 1 }}>
             {menuItems.find((item) => item.path === location.pathname)?.text || 'Dashboard'}
           </Typography>
+          <IconButton color="inherit" onClick={handleAvatarClick}>
+            <AccountCircle sx={{ fontSize: 32 }} />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          >
+            <MenuItem onClick={handleMenuClose}>Profil</MenuItem>
+            <MenuItem onClick={handleMenuClose}>Çıkış Yap</MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
       <Box
@@ -122,8 +184,10 @@ function Layout({ children }) {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          p: { xs: 1.5, sm: 3 },
           width: { sm: `calc(100% - ${drawerWidth}px)` },
+          minHeight: '100vh',
+          background: 'linear-gradient(135deg, #f8f9fa 0%, #fffbe6 100%)',
         }}
       >
         <Toolbar />

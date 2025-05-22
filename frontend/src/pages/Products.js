@@ -130,8 +130,8 @@ function Products() {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <Typography variant="h5" component="h2">
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h5" component="h2" sx={{ fontWeight: 800, letterSpacing: 1, color: 'primary.main' }}>
           Ürünler
         </Typography>
         <Box>
@@ -139,7 +139,15 @@ function Products() {
             variant="contained"
             startIcon={<AddIcon />}
             onClick={() => handleOpenDialog()}
-            sx={{ mr: 2 }}
+            sx={{
+              mr: 2,
+              boxShadow: '0 2px 8px rgba(255,111,60,0.12)',
+              borderRadius: 3,
+              fontWeight: 700,
+              px: 2.5,
+              py: 1.2,
+              fontSize: 16,
+            }}
           >
             Yeni Ürün
           </Button>
@@ -148,27 +156,44 @@ function Products() {
             color="primary"
             onClick={handleSync}
             disabled={loading}
+            sx={{
+              boxShadow: '0 2px 8px rgba(255,111,60,0.12)',
+              borderRadius: 3,
+              fontWeight: 700,
+              px: 2.5,
+              py: 1.2,
+              fontSize: 16,
+            }}
           >
             {loading ? <CircularProgress size={24} /> : 'Senkronize Et'}
           </Button>
         </Box>
       </Box>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ borderRadius: 4, boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
         <Table>
           <TableHead>
-            <TableRow>
-              <TableCell>Barkod</TableCell>
-              <TableCell>Ürün Adı</TableCell>
-              <TableCell>Satış Fiyatı</TableCell>
-              <TableCell>Liste Fiyatı</TableCell>
-              <TableCell>Stok</TableCell>
-              <TableCell>KDV</TableCell>
-              <TableCell>İşlemler</TableCell>
+            <TableRow sx={{ background: 'linear-gradient(90deg, #ffb26b 0%, #ff6f3c 100%)' }}>
+              <TableCell sx={{ color: '#fff', fontWeight: 700 }}>Barkod</TableCell>
+              <TableCell sx={{ color: '#fff', fontWeight: 700 }}>Ürün Adı</TableCell>
+              <TableCell sx={{ color: '#fff', fontWeight: 700 }}>Satış Fiyatı</TableCell>
+              <TableCell sx={{ color: '#fff', fontWeight: 700 }}>Liste Fiyatı</TableCell>
+              <TableCell sx={{ color: '#fff', fontWeight: 700 }}>Stok</TableCell>
+              <TableCell sx={{ color: '#fff', fontWeight: 700 }}>KDV</TableCell>
+              <TableCell sx={{ color: '#fff', fontWeight: 700 }}>İşlemler</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map((product) => (
-              <TableRow key={product._id}>
+            {products.map((product, idx) => (
+              <TableRow
+                key={product._id}
+                sx={{
+                  background: idx % 2 === 0 ? '#fff' : '#f8f9fa',
+                  transition: 'background 0.2s',
+                  '&:hover': {
+                    background: 'rgba(255,111,60,0.08)',
+                  },
+                }}
+              >
                 <TableCell>{product.barcode}</TableCell>
                 <TableCell>{product.title}</TableCell>
                 <TableCell>{product.salePrice} TL</TableCell>
@@ -176,7 +201,22 @@ function Products() {
                 <TableCell>{product.quantity}</TableCell>
                 <TableCell>%{product.vatRate}</TableCell>
                 <TableCell>
-                  <Button size="small" onClick={() => handleOpenDialog(product)}>
+                  <Button
+                    size="small"
+                    onClick={() => handleOpenDialog(product)}
+                    sx={{
+                      borderRadius: 2,
+                      fontWeight: 600,
+                      px: 2,
+                      py: 0.7,
+                      boxShadow: '0 1px 4px rgba(255,111,60,0.10)',
+                      color: 'primary.main',
+                      background: 'rgba(255,111,60,0.08)',
+                      '&:hover': {
+                        background: 'rgba(255,111,60,0.18)',
+                      },
+                    }}
+                  >
                     Düzenle
                   </Button>
                 </TableCell>
@@ -186,19 +226,19 @@ function Products() {
         </Table>
       </TableContainer>
 
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>
+      <Dialog open={openDialog} onClose={handleCloseDialog} PaperProps={{ sx: { borderRadius: 4, p: 2 } }}>
+        <DialogTitle sx={{ fontWeight: 700, color: 'primary.main' }}>
           {selectedProduct ? 'Ürün Düzenle' : 'Yeni Ürün Ekle'}
         </DialogTitle>
-        <DialogContent>
-          <Box sx={{ pt: 2 }}>
+        <DialogContent sx={{ pt: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <TextField
               fullWidth
               label="Ürün Adı"
               name="title"
               value={formData.title}
               onChange={handleChange}
-              margin="normal"
+              sx={{ borderRadius: 2 }}
             />
             <TextField
               fullWidth
@@ -206,50 +246,56 @@ function Products() {
               name="barcode"
               value={formData.barcode}
               onChange={handleChange}
-              margin="normal"
+              sx={{ borderRadius: 2 }}
             />
             <TextField
               fullWidth
               label="Satış Fiyatı"
               name="salePrice"
-              type="number"
               value={formData.salePrice}
               onChange={handleChange}
-              margin="normal"
+              sx={{ borderRadius: 2 }}
             />
             <TextField
               fullWidth
               label="Liste Fiyatı"
               name="listPrice"
-              type="number"
               value={formData.listPrice}
               onChange={handleChange}
-              margin="normal"
+              sx={{ borderRadius: 2 }}
             />
             <TextField
               fullWidth
               label="Stok"
               name="quantity"
-              type="number"
               value={formData.quantity}
               onChange={handleChange}
-              margin="normal"
+              sx={{ borderRadius: 2 }}
             />
             <TextField
               fullWidth
               label="KDV Oranı"
               name="vatRate"
-              type="number"
               value={formData.vatRate}
               onChange={handleChange}
-              margin="normal"
+              sx={{ borderRadius: 2 }}
+            />
+            <TextField
+              fullWidth
+              label="Görsel URL"
+              name="images"
+              value={formData.images[0]?.url || ''}
+              onChange={e => setFormData({ ...formData, images: [{ url: e.target.value }] })}
+              sx={{ borderRadius: 2 }}
             />
           </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>İptal</Button>
-          <Button onClick={handleSubmit} variant="contained">
-            {selectedProduct ? 'Güncelle' : 'Ekle'}
+        <DialogActions sx={{ pb: 2, pr: 3 }}>
+          <Button onClick={handleCloseDialog} color="secondary" sx={{ fontWeight: 600, borderRadius: 2 }}>
+            İptal
+          </Button>
+          <Button onClick={handleSubmit} variant="contained" sx={{ fontWeight: 700, borderRadius: 2 }}>
+            Kaydet
           </Button>
         </DialogActions>
       </Dialog>
