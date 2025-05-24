@@ -4,34 +4,80 @@ Bu proje, Trendyol satıcı paneli ile entegre çalışan bir yönetim sistemidi
 
 ## Proje Yapısı
 
+Aşağıda, projenin dosya ve klasör yapısı ile her bir katmanın işlevi detaylı şekilde açıklanmıştır. Bu yapı, hem kodun okunabilirliğini hem de sürdürülebilirliğini artırmak için modern fullstack mimari prensiplerine göre tasarlanmıştır.
+
 ```
 trendyol-fullstack/
-├── backend/                 # Backend uygulaması
-│   ├── src/
-│   │   ├── api/            # API route'ları
-│   │   ├── config/         # Konfigürasyon dosyaları
-│   │   ├── models/         # MongoDB modelleri
-│   │   ├── services/       # İş mantığı servisleri
-│   │   ├── utils/          # Yardımcı fonksiyonlar
-│   │   └── index.js        # Ana uygulama dosyası
-│   ├── .env               # Backend çevre değişkenleri
-│   └── package.json       # Backend bağımlılıkları
+├── backend/                         # Node.js/Express tabanlı RESTful API
+│   ├── package.json                 # Backend bağımlılıkları ve scriptler
+│   ├── .env                         # Çevre değişkenleri (örn. MongoDB URI, API anahtarları)
+│   └── src/
+│       ├── index.js                 # Backend ana uygulama dosyası (Express entrypoint)
+│       ├── api/                     # Tüm API endpoint route dosyaları
+│       │   ├── products.js          # /api/products endpointleri
+│       │   ├── orders.js            # /api/orders endpointleri
+│       │   ├── stock.js             # /api/stock endpointleri
+│       │   └── settings.js          # /api/settings endpointleri
+│       ├── models/                  # Mongoose şema ve modelleri
+│       │   ├── Product.js           # Ürün modeli
+│       │   ├── Order.js             # Sipariş modeli
+│       │   ├── Settings.js          # Ayarlar modeli
+│       │   └── WebhookLog.js        # Webhook log modeli
+│       ├── services/                # İş mantığı ve Trendyol entegrasyon servisleri
+│       │   ├── productService.js    # Ürün iş mantığı
+│       │   ├── orderService.js      # Sipariş iş mantığı
+│       │   ├── stockService.js      # Stok iş mantığı
+│       │   ├── webhookService.js    # Webhook sunucusu ve event yönetimi
+│       │   └── trendyol.js          # Trendyol API entegrasyon fonksiyonları
+│       ├── config/                  # Konfigürasyon ve veritabanı bağlantısı
+│       │   ├── config.js            # Genel konfigürasyon
+│       │   └── database.js          # MongoDB bağlantı ayarları
+│       ├── utils/                   # Yardımcı fonksiyonlar ve Trendyol API wrapper
+│       │   └── trendyolApi.js
+│       └── test/                    # Test ve örnek veri scriptleri
+│           └── db-test.js
 │
-├── frontend/               # Frontend uygulaması
-│   ├── src/
-│   │   ├── components/    # React bileşenleri
-│   │   ├── pages/        # Sayfa bileşenleri
-│   │   ├── store/        # Redux store ve slice'lar
-│   │   ├── services/     # API servisleri
-│   │   ├── utils/        # Yardımcı fonksiyonlar
-│   │   └── App.js        # Ana uygulama bileşeni
-│   ├── .env             # Frontend çevre değişkenleri
-│   └── package.json     # Frontend bağımlılıkları
+├── frontend/                        # React tabanlı kullanıcı arayüzü
+│   ├── package.json                 # Frontend bağımlılıkları ve scriptler
+│   └── src/
+│       ├── App.js                   # Ana uygulama bileşeni ve tema
+│       ├── index.js                 # React entrypoint
+│       ├── components/              # Ortak UI bileşenleri (örn. Layout)
+│       │   └── Layout.js
+│       ├── pages/                   # Uygulama sayfaları
+│       │   ├── Dashboard.js         # Genel istatistikler ve özet
+│       │   ├── Products.js          # Ürün yönetimi arayüzü
+│       │   ├── Orders.js            # Sipariş yönetimi arayüzü
+│       │   ├── Stock.js             # Stok yönetimi arayüzü
+│       │   └── Settings.js          # Ayarlar ve entegrasyon sayfası
+│       ├── store/                   # Redux store ve global state yönetimi
+│       │   ├── index.js
+│       │   └── slices/              # Her işlev için ayrı slice dosyaları
+│       │       ├── productsSlice.js
+│       │       ├── ordersSlice.js
+│       │       ├── stockSlice.js
+│       │       └── settingsSlice.js
+│       ├── App.css                  # Global stiller
+│       └── index.css                # Temel stiller
 │
-├── .gitignore           # Git tarafından yok sayılacak dosyalar
-├── package.json         # Ana proje bağımlılıkları
-└── README.md           # Proje dokümantasyonu
+├── .gitignore                       # Versiyon kontrolü için hariç tutulan dosyalar
+├── package.json                     # Monorepo scriptleri ve kök bağımlılıklar
+├── package-lock.json
+└── README.md                        # Proje dokümantasyonu ve kullanım rehberi
 ```
+
+### Katmanlar ve Mimarinin Avantajları
+- **Backend (API):** Tüm iş mantığı, veri yönetimi ve Trendyol ile entegrasyon burada merkezi olarak yönetilir. Servis ve model katmanları ile kodun sürdürülebilirliği ve test edilebilirliği artırılmıştır.
+- **Frontend (UI):** Modern, responsive ve kullanıcı dostu bir arayüz. Sayfa ve bileşen bazlı mimari ile kolay geliştirme ve bakım.
+- **Redux Store:** Uygulama genelinde tutarlı ve yönetilebilir bir state yapısı sağlar.
+- **Test ve Geliştirme:** Hot reload, nodemon ve örnek veri scriptleri ile hızlı geliştirme ve test imkanı.
+
+### Projeyi Farklı Kılanlar
+- **Gerçekçi e-ticaret senaryoları ve Trendyol API entegrasyonu**
+- **Tamamen modüler ve ölçeklenebilir dosya yapısı**
+- **Modern UI/UX ve responsive tasarım**
+- **Açık, anlaşılır ve zengin dokümantasyon**
+- **Kolay kurulum ve tek komutla başlatma**
 
 ## Özellikler
 
@@ -150,4 +196,4 @@ MIT
 
 ## İletişim
 
-Sorularınız veya önerileriniz için [email protected] adresine mail atabilirsiniz. 
+Sorularınız veya önerileriniz için k.mertguney@gmail.com adresine mail atabilirsiniz. 
